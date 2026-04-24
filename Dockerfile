@@ -1,5 +1,7 @@
 # Stage 1 — Build frontend
 FROM node:20-alpine AS frontend-builder
+ARG VITE_BASE_URL=http://localhost:3001
+ENV VITE_BASE_URL=$VITE_BASE_URL
 WORKDIR /app/frontend
 COPY frontend/package.json ./
 RUN npm install

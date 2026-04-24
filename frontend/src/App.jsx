@@ -6,6 +6,7 @@ import { AuthScreen } from './components/AuthScreen.jsx';
 import { Dashboard } from './components/Dashboard.jsx';
 import { Stats } from './components/Stats.jsx';
 import { api, setToken } from './api/client.js';
+import { shortUrl } from './utils/baseUrl.js';
 
 const LS_KEY = 'shortwave_state_v1';
 const loadState = () => { try { return JSON.parse(localStorage.getItem(LS_KEY) || '{}'); } catch { return {}; } };
@@ -68,7 +69,7 @@ function AppInner() {
     push('Link created', { icon: 'check' });
   };
   const onCopy = (u) => {
-    const s = `https://shw.link/${u.slug}`;
+    const s = shortUrl(u.slug);
     navigator.clipboard?.writeText(s);
     push('Copied ' + s, { icon: 'copy' });
   };

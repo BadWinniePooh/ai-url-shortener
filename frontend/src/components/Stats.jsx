@@ -3,6 +3,7 @@ import { Icon } from './Icons.jsx';
 import { LineChart, WorldMap, QRCode } from './Charts.jsx';
 import { api } from '../api/client.js';
 import { HealthPill, relDate } from './Dashboard.jsx';
+import { getBaseHost, shortUrl } from '../utils/baseUrl.js';
 
 export const Stats = ({ urlSlug, onBack, push }) => {
   const [data, setData] = React.useState(null);
@@ -38,13 +39,14 @@ export const Stats = ({ urlSlug, onBack, push }) => {
     );
   }
 
-  const shortUrl = `shw.link/${data.slug}`;
+  const shortLink = shortUrl(data.slug);
+  const shortDisplay = `${getBaseHost()}/${data.slug}`;
   const seriesDisplay = range === '7d' ? data.series.slice(-7)
     : range === '90d' ? [...data.series, ...data.series, ...data.series].slice(0, 90)
     : data.series;
 
   const copyShort = () => {
-    navigator.clipboard?.writeText('https://' + shortUrl);
+    navigator.clipboard?.writeText(shortLink);
     push('Copied', { icon: 'copy' });
   };
 
@@ -71,7 +73,7 @@ export const Stats = ({ urlSlug, onBack, push }) => {
             )}
           </div>
           <div className="short-big">
-            <span className="mute">shw.link/</span>
+            <span className="mute">{getBaseHost()}/</span>
             <span style={{ color: 'var(--accent)' }}>{data.slug}</span>
             <button className="btn btn-icon tt" data-tt="Copy" onClick={copyShort}>
               <Icon name="copy" size={14} />
@@ -97,7 +99,7 @@ export const Stats = ({ urlSlug, onBack, push }) => {
           </div>
         </div>
         <div className="qr-wrap">
-          <QRCode value={shortUrl} size={120} />
+          <QRCode value={shortLink} size={120} />
         </div>
       </div>
 

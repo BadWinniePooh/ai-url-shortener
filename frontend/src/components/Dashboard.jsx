@@ -2,6 +2,7 @@ import React from 'react';
 import { Icon } from './Icons.jsx';
 import { Captcha } from './Captcha.jsx';
 import { api } from '../api/client.js';
+import { getBaseHost, shortUrl } from '../utils/baseUrl.js';
 
 const relDate = (ts) => {
   const d = (Date.now() - new Date(ts).getTime()) / (1000 * 60 * 60 * 24);
@@ -60,7 +61,7 @@ const ShortenBar = ({ onCreate, captchaVariant, push }) => {
           Custom slug <span className="mute" style={{ textTransform: 'none', letterSpacing: 0 }}>— leave blank for random</span>
         </label>
         <div className="slug-wrap">
-          <span className="slug-prefix">shw.link/</span>
+          <span className="slug-prefix">{getBaseHost()}/</span>
           <input className="input" placeholder="auto"
                  value={slug} onChange={e => setSlug(e.target.value.replace(/[^a-z0-9_-]/gi, ''))} />
         </div>
@@ -99,7 +100,7 @@ const UrlCard = ({ u, onOpen, onCopy, onDelete }) => {
         <span className="mute" style={{ fontSize: 11 }}>{relDate(u.created_at)}</span>
       </div>
       <div className="short">
-        <span className="mute">shw.link/</span>
+        <span className="mute">{getBaseHost()}/</span>
         <span className="accent">{u.slug}</span>
       </div>
       <div className="target" title={u.target_url}>{u.target_url}</div>
@@ -129,7 +130,7 @@ const UrlRow = ({ u, onOpen, onCopy }) => {
   return (
     <div className="url-row" onClick={() => onOpen(u.slug)}>
       <div className="short-cell">
-        <span className="mute">shw.link/</span>
+        <span className="mute">{getBaseHost()}/</span>
         <span style={{ color: 'var(--accent)' }}>{u.slug}</span>
       </div>
       <div className="target-cell">{u.target_url}</div>
@@ -233,10 +234,10 @@ export const Dashboard = ({ urls, layout, onLayout, onOpen, onCreate, onCopy, on
             </p>
             <div className="result-short">
               <span>
-                <span className="mute">https://</span>shw.link/<span style={{ color: 'var(--accent)' }}>{newShort.slug}</span>
+                <span className="mute">{getBaseHost()}/</span><span style={{ color: 'var(--accent)' }}>{newShort.slug}</span>
               </span>
               <button className="btn btn-icon" onClick={() => {
-                navigator.clipboard?.writeText(`https://shw.link/${newShort.slug}`);
+                navigator.clipboard?.writeText(shortUrl(newShort.slug));
                 push('Copied', { icon: 'copy' });
               }}>
                 <Icon name="copy" size={14} />
